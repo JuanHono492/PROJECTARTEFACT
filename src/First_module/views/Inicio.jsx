@@ -21,7 +21,8 @@ const Inicio = () => {
     };
 
     // Función para manejar el inicio de sesión
-    const handleLogin = () => {
+    const handleLogin = (e) => {
+        e.preventDefault(); // Evita el comportamiento por defecto del formulario
         const validUsername = 'medico';
         const validPassword = '1234';
 
@@ -40,7 +41,7 @@ const Inicio = () => {
                 <h2>Bienvenido a Hernández Lab</h2>
                 <p>Inicio de sesión:</p>
                 
-                <form>
+                <form onSubmit={handleLogin}>
                     {/* Campo de texto para el usuario */}
                     <BasicTextFields
                         label="Usuario"
@@ -62,7 +63,7 @@ const Inicio = () => {
                     {error && <p style={{ color: 'red' }}>{error}</p>} {/* Muestra el error si existe */}
 
                     {/* Botón de inicio de sesión que ejecuta handleLogin al hacer clic */}
-                    <ButtonUsage onClick={handleLogin} /> 
+                    <ButtonUsage onClick={handleLogin} />
                 </form>
             </main>
             <Footer />

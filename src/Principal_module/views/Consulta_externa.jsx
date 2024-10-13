@@ -1,12 +1,19 @@
 import React from 'react';
+import NavigationBar from '../components/navegation_bar'; // Ajusta esta ruta según la ubicación del archivo
+import './Consulta_externa.css'; // Asegúrate de que esta ruta sea correcta
 
-const Consulta_externa = () => {
+const ConsultaExterna = () => {
     return (
-        <div>
-            <h1>consulta externa</h1>
-            <p>GAA</p>
+        <div className="dashboard-container">
+            <nav className="navbar">
+                <NavigationBar /> {/* Utiliza el componente de navegación aquí */}
+            </nav>
+            <main className="main-content">
+                <h1>Consulta Externa</h1>
+                <p>gaaa</p>
+            </main>
         </div>
     );
 };
 
-export default Consulta_externa;
+export default ConsultaExterna;

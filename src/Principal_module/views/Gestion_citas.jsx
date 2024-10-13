@@ -1,10 +1,16 @@
 import React from 'react';
+import NavigationBar from '../components/navegation_bar';
 
 const GestionCitas = () => {
     return (
-        <div>
-            <h1>Gestión de Citas</h1>
-            <p>Aquí puedes gestionar las citas de los pacientes.</p>
+        <div className="dashboard-container">
+            <nav className="navbar">
+                <NavigationBar /> 
+            </nav>
+            <main className="main-content">
+                <h1>Generacion de citas</h1>
+                <p>gaaa</p>
+            </main>
         </div>
     );
 };

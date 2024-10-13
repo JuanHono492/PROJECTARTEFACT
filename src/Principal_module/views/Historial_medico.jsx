@@ -1,10 +1,16 @@
 import React from 'react';
+import NavigationBar from '../components/navegation_bar';
 
 const Historial_medico = () => {
     return (
-        <div>
-            <h1>Historial medico</h1>
-            <p>GAAAAAAAAA.</p>
+        <div className="dashboard-container">
+            <nav className="navbar">
+                <NavigationBar /> 
+            </nav>
+            <main className="main-content">
+                <h1>Historial medico</h1>
+                <p>gaaa</p>
+            </main>
         </div>
     );
 };
