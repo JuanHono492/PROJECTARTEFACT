@@ -44,6 +44,7 @@ export default function BasicTabs() {
     '/historial-clinico',
     '/consulta-externa',
     '/generacion-reportes',
+    '/gestion-usuarios',
   ];
 
   // Encuentra el índice correspondiente a la ruta actual, si no coincide, usa 0
@@ -79,6 +80,7 @@ export default function BasicTabs() {
           <Tab component={Link} to="/historial-clinico" label="Historial Clínico" {...a11yProps(2)} />
           <Tab component={Link} to="/consulta-externa" label="Consulta Externa" {...a11yProps(3)} />
           <Tab component={Link} to="/generacion-reportes" label="Generación de Reportes" {...a11yProps(4)} />
+          <Tab component={Link} to="/gestion-usuarios" label="Gestion de Usuarios" {...a11yProps(5)} />
         </Tabs>
       </Box>
     </Box>

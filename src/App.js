@@ -6,6 +6,7 @@ import GestionCitas from './Principal_module/views/Gestion_citas';
 import HistorialClinico from './Principal_module/views/Historial_medico';
 import ConsultaExterna from './Principal_module/views/Consulta_externa';
 import GeneracionReportes from './Principal_module/views/Generacion_reportes';
+import GestionUsuarios from './Principal_module/views/Gestion_usuarios';
 import Perfil from './User_module/views/Perfil';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/historial-clinico" element={<HistorialClinico />} />
         <Route path="/consulta-externa" element={<ConsultaExterna />} />
         <Route path="/generacion-reportes" element={<GeneracionReportes />} />
+        <Route path="/gestion-usuarios" element={<GestionUsuarios />} />
         
         {/* Módulo de Usuario */}
         <Route path="/perfil" element={<Perfil />} />
