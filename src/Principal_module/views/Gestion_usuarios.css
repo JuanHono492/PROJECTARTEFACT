@@ -1,10 +1,19 @@
 /* Contenedor principal */
 .dashboard-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     height: 100vh;
-    background-color: #f0f2f5;
+    background-color: #f0f5f5;
+}
+/* Barra de navegación */
+.navbar {
+    background-color: #ffffff;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 /* Tarjeta principal */
