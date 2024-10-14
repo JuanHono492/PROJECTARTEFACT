@@ -1,5 +1,6 @@
 import React from 'react';
 import NavigationBar from '../components/navegation_bar';
+import MedicalHistoryTable from '../components/Historial_medico/MedicalHistoryTable';
 
 const Historial_medico = () => {
     return (
@@ -8,8 +9,8 @@ const Historial_medico = () => {
                 <NavigationBar /> 
             </nav>
             <main className="main-content">
-                <h1>Historial medico</h1>
-                <p>gaaa</p>
+                <h1>Historial Médico del Paciente</h1>
+                <MedicalHistoryTable />
             </main>
         </div>
     );

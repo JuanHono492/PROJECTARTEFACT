@@ -1,0 +1,92 @@
+/* Contenedor de la tabla */
+.table-container {
+    margin: 20px auto;
+    max-width: 95%;
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f9fbfc;
+}
+
+/* Estilo del campo de búsqueda */
+.search-container {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.search-input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 16px;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tabla de historial */
+.medical-history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de la tabla */
+.medical-history-table th {
+    background-color: #34495e;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    padding: 16px 20px;
+    border-bottom: 2px solid #2c3e50;
+    font-size: 17px;
+}
+
+/* Celdas del cuerpo de la tabla */
+.medical-history-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #e0e4e8;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+/* Filas alternas con fondo */
+.medical-history-table tr:nth-child(even) {
+    background-color: #f4f7fa;
+}
+
+/* Efecto hover en las filas */
+.medical-history-table tr:hover {
+    background-color: #e9f5fc;
+}
+
+/* Ajuste para dispositivos pequeños */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 10px auto;
+        max-width: 100%;
+    }
+
+    .medical-history-table th,
+    .medical-history-table td {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+
+    .search-input {
+        width: 100%;
+        font-size: 14px;
+    }
+}
