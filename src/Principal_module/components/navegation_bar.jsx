@@ -60,12 +60,20 @@ export default function BasicTabs() {
       setValue(currentTab);
     }
   }, [location.pathname, currentTab, value]);
-  
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', backgroundColor: '#ffffff' }}> {/* Fondo blanco */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+          TabIndicatorProps={{ style: { backgroundColor: '#20869c' } }} // Cambiar el color del indicador
+          textColor="inherit" // Permite que el color de las tabs se herede
+          sx={{
+            '& .MuiTab-root': { color: '#20869c' }, // Establece el color de texto celeste
+          }}
+        >
           <Tab component={Link} to="/dashboard" label="Dashboard" {...a11yProps(0)} />
           <Tab component={Link} to="/gestion-citas" label="Gestión de Citas" {...a11yProps(1)} />
           <Tab component={Link} to="/historial-clinico" label="Historial Clínico" {...a11yProps(2)} />
