@@ -9,7 +9,7 @@ const Generación_reportes = () => {
             </nav>
             <main className="main-content">
                 <h1>Generacion de reportes</h1>
-                <p>gaaa</p>
+                <p>En proceso...</p>
             </main>
         </div>
     );

@@ -10,7 +10,7 @@ const ConsultaExterna = () => {
             </nav>
             <main className="main-content">
                 <h1>Consulta Externa</h1>
-                <p>gaaa</p>
+                <p>En proceso...</p>
             </main>
         </div>
     );
