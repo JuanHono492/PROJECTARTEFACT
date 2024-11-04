@@ -7,30 +7,44 @@ import ButtonUsage from '../components/Button'; // Importa el componente de bot�
 import './Inicio.css';
 
 const Inicio = () => {
-    const navigate = useNavigate(); // Hook para redirigir después de iniciar sesión
-    const [credentials, setCredentials] = useState({ username: '', password: '' }); // Estado para almacenar las credenciales
-    const [error, setError] = useState(''); // Estado para mostrar errores
+    const navigate = useNavigate();
+    const [credentials, setCredentials] = useState({ username: '', password: '' });
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // Estado para manejar el loading
 
-    // Función para manejar los cambios en los inputs
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setCredentials({
             ...credentials,
-            [name]: value, // Actualiza dinámicamente el username o password
+            [name]: value,
         });
     };
 
-    // Función para manejar el inicio de sesión
-    const handleLogin = (e) => {
-        e.preventDefault(); // Evita el comportamiento por defecto del formulario
-        const validUsername = 'medico';
-        const validPassword = '1234';
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true); // Muestra el estado de carga mientras se espera la respuesta
 
-        // Verifica si las credenciales son correctas
-        if (credentials.username === validUsername && credentials.password === validPassword) {
-            navigate('/dashboard'); // Redirige al dashboard si las credenciales son correctas
-        } else {
-            setError('Usuario o contraseña incorrectos.');
+        try {
+            const response = await fetch('http://localhost:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            const data = await response.json();
+            setLoading(false);
+
+            if (response.ok) {
+                navigate('/dashboard');
+            } else {
+                setError(data.error || 'Usuario o contraseña incorrectos.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError('Error de red o del servidor.');
+            setLoading(false);
         }
     };
 
@@ -38,33 +52,39 @@ const Inicio = () => {
         <div className="inicio-container">
             <Header />
             <main className="main-content">
-                <h2>Bienvenido a Hernández Lab</h2>
-                <p>Inicio de sesión:</p>
-                
-                <form onSubmit={handleLogin}>
-                    {/* Campo de texto para el usuario */}
-                    <BasicTextFields
-                        label="Usuario"
-                        value={credentials.username}
-                        onChange={handleInputChange}
-                        name="username"
-                        type="text"
-                    />
+                <div className="login-box">
+                    <h2>Bienvenido a Hernández Lab</h2>
+                    <p className="login-description">Por favor, ingrese sus credenciales para continuar</p>
+                    
+                    <form onSubmit={handleLogin}>
+                        <BasicTextFields
+                            label="Usuario"
+                            value={credentials.username}
+                            onChange={handleInputChange}
+                            name="username"
+                            type="text"
+                            placeholder="Ingrese su usuario"
+                        />
 
-                    {/* Campo de texto para la contraseña */}
-                    <BasicTextFields
-                        label="Contraseña"
-                        value={credentials.password}
-                        onChange={handleInputChange}
-                        name="password"
-                        type="password"
-                    />
+                        <BasicTextFields
+                            label="Contraseña"
+                            value={credentials.password}
+                            onChange={handleInputChange}
+                            name="password"
+                            type="password"
+                            placeholder="Ingrese su contraseña"
+                        />
 
-                    {error && <p style={{ color: 'red' }}>{error}</p>} {/* Muestra el error si existe */}
+                        {error && <p className="error-text">{error}</p>}
 
-                    {/* Botón de inicio de sesión que ejecuta handleLogin al hacer clic */}
-                    <ButtonUsage onClick={handleLogin} />
-                </form>
+                        {/* Botón de inicio de sesión */}
+                        <div className="button-container">
+                            <ButtonUsage onClick={handleLogin} disabled={loading}>
+                                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                            </ButtonUsage>
+                        </div>
+                    </form>
+                </div>
             </main>
             <Footer />
         </div>
