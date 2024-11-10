@@ -8,6 +8,7 @@ import ConsultaExterna from './Principal_module/views/Consulta_externa';
 import GeneracionReportes from './Principal_module/views/Generacion_reportes';
 import GestionUsuarios from './Principal_module/views/Gestion_usuarios';
 import Perfil from './User_module/views/Perfil';
+import CrearUsuario from './User_module/views/CrearUsuario';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/consulta-externa" element={<ConsultaExterna />} />
         <Route path="/generacion-reportes" element={<GeneracionReportes />} />
         <Route path="/gestion-usuarios" element={<GestionUsuarios />} />
+        <Route path="/Crear-Usuario" element={<CrearUsuario />} />
         
         {/* Módulo de Usuario */}
         <Route path="/perfil" element={<Perfil />} />
