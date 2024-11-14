@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
-import BasicTextFields from '../components/TextField';
-import ButtonUsage from '../components/Button';
 import './Inicio.css';
 
 const Inicio = () => {
@@ -50,41 +47,44 @@ const Inicio = () => {
 
     return (
         <div className="inicio-container">
-            <Header />
-            <main className="main-content">
+            <div className="inicio-left">
                 <div className="login-box">
-                    <h2>Bienvenido a Hernández Lab</h2>
-                    <p className="login-description">Por favor, ingrese sus credenciales para continuar</p>
-                    
+                    <h2>Bienvenidos</h2>
                     <form onSubmit={handleLogin}>
-                        <BasicTextFields
-                            label="Usuario"
+                        <input
+                            type="text"
+                            name="username"
                             value={credentials.username}
                             onChange={handleInputChange}
-                            name="username"
-                            type="text"
-                            placeholder="Ingrese su usuario"
+                            placeholder="Usuario"
+                            required
                         />
 
-                        <BasicTextFields
-                            label="Contraseña"
+                        <input
+                            type="password"
+                            name="password"
                             value={credentials.password}
                             onChange={handleInputChange}
-                            name="password"
-                            type="password"
-                            placeholder="Ingrese su contraseña"
+                            placeholder="Contraseña"
+                            required
                         />
 
                         {error && <p className="error-text">{error}</p>}
 
                         <div className="button-container">
-                            <ButtonUsage onClick={handleLogin} disabled={loading}>
+                            <button type="submit" disabled={loading}>
                                 {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-                            </ButtonUsage>
+                            </button>
                         </div>
                     </form>
                 </div>
-            </main>
+            </div>
+            <div className="inicio-right">
+                {/* Coloca aquí el logo o una imagen decorativa */}
+                <div className="logo-container">
+                    <img src="/ruta-al-logo.png" alt="Logo de la Clínica" className="logo-image" />
+                </div>
+            </div>
             <Footer />
         </div>
     );

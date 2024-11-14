@@ -48,18 +48,18 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-            <nav className="navbar">
-                <NavigationBar /> {/* Aquí va el componente de la barra de navegación */}
-            </nav>
+      <nav className="navbar">
+        <NavigationBar /> {/* Componente de barra de navegación */}
+      </nav>
       <main className="main-content">
-        <h1>Panel de Control</h1>
+        <h1 className="dashboard-title">Panel de Control</h1>
         <div className="dashboard-cards">
           <div className="card">
-            <h2>Gráfico de Barras: Usuarios</h2>
+            <h2>Usuarios</h2>
             <Bar data={barChartData} />
           </div>
           <div className="card">
-            <h2>Gráfico de Líneas: Ingresos</h2>
+            <h2>Ingresos Semanales</h2>
             <Line data={lineChartData} />
           </div>
         </div>

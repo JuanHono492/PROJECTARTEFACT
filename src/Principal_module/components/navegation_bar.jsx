@@ -42,7 +42,6 @@ export default function BasicTabs() {
     '/dashboard',
     '/gestion-citas',
     '/historial-clinico',
-    '/consulta-externa',
     '/generacion-reportes',
     '/gestion-usuarios',
   ];
@@ -78,9 +77,8 @@ export default function BasicTabs() {
           <Tab component={Link} to="/dashboard" label="Dashboard" {...a11yProps(0)} />
           <Tab component={Link} to="/gestion-citas" label="Gestión de Citas" {...a11yProps(1)} />
           <Tab component={Link} to="/historial-clinico" label="Historial Clínico" {...a11yProps(2)} />
-          <Tab component={Link} to="/consulta-externa" label="Consulta Externa" {...a11yProps(3)} />
-          <Tab component={Link} to="/generacion-reportes" label="Generación de Reportes" {...a11yProps(4)} />
-          <Tab component={Link} to="/gestion-usuarios" label="Gestion de Usuarios" {...a11yProps(5)} />
+          <Tab component={Link} to="/generacion-reportes" label="Historial de Reportes" {...a11yProps(3)} />
+          <Tab component={Link} to="/gestion-usuarios" label="Creacion de nuevo usuario" {...a11yProps(4)} />
         </Tabs>
       </Box>
     </Box>

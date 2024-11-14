@@ -72,7 +72,7 @@ const MedicalHistoryTable = () => {
                                 <td>{entry.Paciente ? `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}` : 'N/A'}</td>
                                 <td>{entry.Diagnostico}</td>
                                 <td>{entry.Tratamiento}</td>
-                                <td>{entry.Medico ? `${entry.Medico.Nombre} ${entry.Medico.Apellido}` : 'N/A'}</td>
+                                <td>{entry.Medico ? `Dr. ${entry.Medico.Nombre} ${entry.Medico.Apellido}` : 'N/A'}</td>
                             </tr>
                         ))
                     ) : (

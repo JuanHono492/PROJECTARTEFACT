@@ -1,137 +1,132 @@
 import React, { useState } from 'react';
 import NavigationBar from '../components/navegation_bar';
-import InputField from '../components/Gestion_usuarios/InputField';
-import SelectField from '../components/Gestion_usuarios/SelectField';
-import AddressSection from '../components/Gestion_usuarios/AddressSection';
-import ContactSection from '../components/Gestion_usuarios/ContactSection';
-import './Gestion_usuarios.css'; // Importar los nuevos estilos
+import './Gestion_usuarios.css';
+import axios from 'axios';
 
 const GestionUsuarios = () => {
     const [formData, setFormData] = useState({
         nombre: '',
-        segundoNombre: '',
         apellido: '',
-        codigoEmpleado: '',
-        posicion: '',
-        departamento: '',
-        sucursal: '',
-        telefonoOficina: '',
-        extension: '',
-        movil: '',
-        email: '',
-        direccion: {
-            calle: '',
-            ciudad: '',
-            estado: '',
-            codigoPostal: ''
-        }
+        dni: '',
+        nombreUsuario: '',
+        rol: '',
+        correoElectronico: '',
+        telefono: '',
+        estado: true,
+        contrasena: '',
+        repetirContrasena: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordMatch, setPasswordMatch] = useState(true);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData((prevData) => ({
+            ...prevData,
             [name]: value
-        });
+        }));
+
+        if (name === 'contrasena' || name === 'repetirContrasena') {
+            setPasswordMatch(
+                name === 'contrasena'
+                    ? value === formData.repetirContrasena
+                    : formData.contrasena === value
+            );
+        }
     };
 
-    const handleAddressChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            direccion: {
-                ...formData.direccion,
-                [name]: value
-            }
-        });
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Datos enviados:", formData);
+
+        if (!passwordMatch) {
+            alert('Las contraseñas no coinciden');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5000/usuarios', formData);
+            console.log("Usuario creado:", response.data);
+            alert("Usuario creado exitosamente");
+        } catch (error) {
+            console.error("Error al crear usuario:", error);
+            alert(`Error al crear usuario: ${error.response?.data?.error || error.message}`);
+        }
     };
-
-    const posiciones = [
-        { value: 'Administrativo', label: 'Administrativo' },
-        { value: 'Almacen', label: 'Almacén' },
-        { value: 'Gerente', label: 'Gerente' },
-        { value: 'Ventas', label: 'Ventas' },
-        { value: 'Seguridad', label: 'Seguridad' }
-    ];
-
-    const departamentos = [
-        { value: 'Administración', label: 'Administración' },
-        { value: 'Finanzas', label: 'Finanzas' },
-        { value: 'IT', label: 'IT' }
-    ];
 
     return (
         <div className="dashboard-container">
             <nav className="navbar">
-                <NavigationBar /> 
+                <NavigationBar />
             </nav>
             <main className="main-content">
                 <div className="card">
                     <h1>Registro de Usuario</h1>
                     <form onSubmit={handleSubmit} className="user-form">
-                        <div className="form-section">
-                            <InputField 
-                                label="Nombre" 
-                                type="text" 
-                                name="nombre" 
-                                value={formData.nombre} 
-                                onChange={handleInputChange} 
+                        <div className="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" name="nombre" value={formData.nombre} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Apellido:</label>
+                            <input type="text" name="apellido" value={formData.apellido} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>DNI:</label>
+                            <input type="text" name="dni" value={formData.dni} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Nombre de Usuario:</label>
+                            <input type="text" name="nombreUsuario" value={formData.nombreUsuario} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Rol:</label>
+                            <input type="text" name="rol" value={formData.rol} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Correo Electrónico:</label>
+                            <input type="email" name="correoElectronico" value={formData.correoElectronico} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Teléfono:</label>
+                            <input type="tel" name="telefono" value={formData.telefono} onChange={handleInputChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Contraseña:</label>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="contrasena"
+                                value={formData.contrasena}
+                                onChange={handleInputChange}
+                                required
                             />
-                            <InputField 
-                                label="Segundo Nombre" 
-                                type="text" 
-                                name="segundoNombre" 
-                                value={formData.segundoNombre} 
-                                onChange={handleInputChange} 
+                            <button type="button" onClick={toggleShowPassword} className="toggle-password-button">
+                                {showPassword ? "Ocultar" : "Mostrar"}
+                            </button>
+                        </div>
+                        <div className="form-group">
+                            <label>Repetir Contraseña:</label>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="repetirContrasena"
+                                value={formData.repetirContrasena}
+                                onChange={handleInputChange}
+                                required
                             />
-                            <InputField 
-                                label="Apellido" 
-                                type="text" 
-                                name="apellido" 
-                                value={formData.apellido} 
-                                onChange={handleInputChange} 
-                            />
-                            <InputField 
-                                label="Código de Empleado" 
-                                type="text" 
-                                name="codigoEmpleado" 
-                                value={formData.codigoEmpleado} 
-                                onChange={handleInputChange} 
+                            {!passwordMatch && <p className="error-message">Las contraseñas no coinciden</p>}
+                        </div>
+                        <div className="form-group">
+                            <label>Estado:</label>
+                            <input
+                                type="checkbox"
+                                name="estado"
+                                checked={formData.estado}
+                                onChange={(e) => setFormData({ ...formData, estado: e.target.checked })}
                             />
                         </div>
-
-                        <div className="form-section">
-                            <SelectField 
-                                label="Posición" 
-                                name="posicion" 
-                                value={formData.posicion} 
-                                onChange={handleInputChange} 
-                                options={posiciones} 
-                            />
-                            <SelectField 
-                                label="Departamento" 
-                                name="departamento" 
-                                value={formData.departamento} 
-                                onChange={handleInputChange} 
-                                options={departamentos} 
-                            />
-                            <InputField 
-                                label="Sucursal" 
-                                type="text" 
-                                name="sucursal" 
-                                value={formData.sucursal} 
-                                onChange={handleInputChange} 
-                            />
-                        </div>
-
-                        <ContactSection formData={formData} handleInputChange={handleInputChange} />
-                        <AddressSection direccion={formData.direccion} handleAddressChange={handleAddressChange} />
-
                         <button type="submit" className="submit-button">Guardar Usuario</button>
                     </form>
                 </div>
