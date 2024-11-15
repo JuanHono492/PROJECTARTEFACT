@@ -9,7 +9,6 @@ const Historial_medico = () => {
                 <NavigationBar /> 
             </nav>
             <main className="main-content">
-                <h1>Historial Médico del Paciente</h1>
                 <MedicalHistoryTable />
             </main>
         </div>

@@ -5,8 +5,10 @@ const MedicalHistoryTable = () => {
     const [historialData, setHistorialData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
-    // Función para obtener los datos del historial médico desde la API
+    // Obtener los datos del historial médico desde la API
     useEffect(() => {
         const fetchHistorialData = async () => {
             try {
@@ -26,24 +28,32 @@ const MedicalHistoryTable = () => {
         fetchHistorialData();
     }, []);
 
-    // Función para manejar el input del campo de búsqueda
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
-    };
+    const handleSearchChange = (event) => setSearchTerm(event.target.value);
 
-    // Filtrar los datos del historial basado en el término de búsqueda
+    const handleStartDateChange = (event) => setStartDate(event.target.value);
+
+    const handleEndDateChange = (event) => setEndDate(event.target.value);
+
     const filteredData = historialData.filter((entry) => {
+        const entryDate = new Date(entry.FechaConsulta);
+        const isInDateRange = (!startDate || entryDate >= new Date(startDate)) &&
+                              (!endDate || entryDate <= new Date(endDate));
+        
         return (
-            entry.FechaConsulta?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            isInDateRange &&
+            (entry.FechaConsulta?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             entry.Diagnostico?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             entry.Tratamiento?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.MotivoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.EstadoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.DNI?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (entry.Medico && `${entry.Medico.Nombre} ${entry.Medico.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (entry.Paciente && `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase()))
+            (entry.Paciente && `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase())))
         );
     });
 
     return (
-        <div className="table-container">
+        <div className="table-container" style={{ width: '100%', maxWidth: '1400px' }}>
             <div className="search-container">
                 <input
                     type="text"
@@ -52,15 +62,35 @@ const MedicalHistoryTable = () => {
                     onChange={handleSearchChange}
                     className="search-input"
                 />
+                <div className="date-filter">
+                    <input
+                        type="date"
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        className="date-input"
+                        placeholder="Fecha de inicio"
+                    />
+                    <input
+                        type="date"
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        className="date-input"
+                        placeholder="Fecha de fin"
+                    />
+                </div>
             </div>
 
             <table className="medical-history-table">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
+                        <th>Fecha de Cita</th>
                         <th>Paciente</th>
+                        <th>DNI</th>
+                        <th>Género</th>
                         <th>Diagnóstico</th>
                         <th>Tratamiento</th>
+                        <th>Motivo de Cita</th>
+                        <th>Estado de Cita</th>
                         <th>Doctor</th>
                     </tr>
                 </thead>
@@ -70,14 +100,18 @@ const MedicalHistoryTable = () => {
                             <tr key={index}>
                                 <td>{new Date(entry.FechaConsulta).toLocaleDateString()}</td>
                                 <td>{entry.Paciente ? `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}` : 'N/A'}</td>
+                                <td>{entry.Paciente?.DNI || 'N/A'}</td>
+                                <td>{entry.Paciente?.Genero || 'N/A'}</td>
                                 <td>{entry.Diagnostico}</td>
                                 <td>{entry.Tratamiento}</td>
+                                <td>{entry.MotivoCita || 'N/A'}</td>
+                                <td>{entry.EstadoCita || 'N/A'}</td>
                                 <td>{entry.Medico ? `Dr. ${entry.Medico.Nombre} ${entry.Medico.Apellido}` : 'N/A'}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5">No se encontraron resultados</td>
+                            <td colSpan="9">No se encontraron resultados</td>
                         </tr>
                     )}
                 </tbody>

@@ -1,92 +1,82 @@
-/* Contenedor de la tabla */
+/* Contenedor principal */
 .table-container {
+    width: 90%;
+    max-width: 1400px;
     margin: 20px auto;
-    max-width: 95%;
-    overflow-x: auto;
-    border-radius: 12px;
+    padding: 20px;
+    background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: #f9fbfc;
+    border-radius: 8px;
+    border: 1px solid #cce7f0;
 }
 
-/* Estilo del campo de búsqueda */
+/* Contenedor de búsqueda */
 .search-container {
-    margin-bottom: 20px;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .search-input {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    width: 250px;
+    width: 100%;
+    max-width: 300px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #a2d2e8;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.date-filter {
+    display: flex;
+    gap: 8px;
+}
+
+.date-input {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #a2d2e8;
     font-size: 16px;
     outline: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+    transition: border-color 0.3s ease;
+    max-width: 130px;
 }
 
-.search-input:focus {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Tabla de historial */
+/* Estilos de la tabla */
 .medical-history-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    font-size: 16px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
 }
 
-/* Encabezado de la tabla */
-.medical-history-table th {
-    background-color: #34495e;
-    color: #ffffff;
-    text-align: center;
-    font-weight: 600;
-    padding: 16px 20px;
-    border-bottom: 2px solid #2c3e50;
-    font-size: 17px;
-}
-
-/* Celdas del cuerpo de la tabla */
+.medical-history-table th,
 .medical-history-table td {
-    padding: 14px 20px;
-    border-bottom: 1px solid #e0e4e8;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid #cce7f0;
+}
+
+.medical-history-table thead th {
+    background-color: #64b5d6;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.medical-history-table tbody tr:nth-child(even) {
+    background-color: #eaf6f9;
+}
+
+.medical-history-table tbody tr:hover {
+    background-color: #d9eef5;
+}
+
+/* Mensaje de error */
+.error-text {
+    color: #d9534f;
+    font-weight: bold;
     text-align: center;
-    color: #2c3e50;
-    font-weight: 400;
-    font-size: 15px;
-}
-
-/* Filas alternas con fondo */
-.medical-history-table tr:nth-child(even) {
-    background-color: #f4f7fa;
-}
-
-/* Efecto hover en las filas */
-.medical-history-table tr:hover {
-    background-color: #e9f5fc;
-}
-
-/* Ajuste para dispositivos pequeños */
-@media (max-width: 768px) {
-    .table-container {
-        margin: 10px auto;
-        max-width: 100%;
-    }
-
-    .medical-history-table th,
-    .medical-history-table td {
-        padding: 12px 10px;
-        font-size: 14px;
-    }
-
-    .search-input {
-        width: 100%;
-        font-size: 14px;
-    }
+    margin-top: 10px;
 }

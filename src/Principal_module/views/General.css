@@ -1,0 +1,94 @@
+/* Contenedor General */
+.main-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 1px solid #cce7f0;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #cce7f0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón de acción general */
+.button {
+    background-color: #20869c;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.button:hover {
+    background-color: #186a7a;
+}
+
+/* Tabla Consistente */
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #cce7f0;
+}
+
+th {
+    background-color: #20869c;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+td {
+    background-color: #f5fcff;
+}
+
+.error-text {
+    color: #d9534f;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Contenido del calendario */
+.calendar-content {
+    padding: 20px;
+    background-color: #f5fcff;
+    border-radius: 8px;
+}
+
+/* Ajuste de sombra y espacio en botones de navegación de calendario */
+.fc-button {
+    background-color: #20869c;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+.fc-button:hover {
+    background-color: #186a7a;
+}
+
+/* Estilo de entradas de búsqueda y fecha */
+.search-input, .date-picker {
+    padding: 8px;
+    border: 1px solid #cce7f0;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 14px;
+}
