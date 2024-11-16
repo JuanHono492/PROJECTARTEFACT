@@ -80,3 +80,17 @@
     text-align: center;
     margin-top: 10px;
 }
+
+
+.generate-report-button {
+    padding: 5px 10px;
+    background-color: #a2d2e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.generate-report-button:hover {
+    background-color: #d9eef5;
+}
