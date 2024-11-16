@@ -38,7 +38,7 @@ const MedicalHistoryTable = () => {
     const handleGenerateReport = async (entry) => {
         try {
             const response = await axios.post(
-                'http://localhost:5000/reportes/generate', // Endpoint del backend
+                'http://localhost:5000/reportes/generate',
                 {
                     template: `
                         <h1>Reporte de Historial Médico</h1>
@@ -47,18 +47,16 @@ const MedicalHistoryTable = () => {
                         <p><strong>Género:</strong> ${entry.Paciente?.Genero}</p>
                         <p><strong>Tipo de Sangre:</strong> ${entry.Paciente?.TipoSangre}</p>
                         <p><strong>Doctor:</strong> ${entry.Medico?.Nombre} ${entry.Medico?.Apellido}</p>
-                        <p><strong>Fecha de Cita:</strong> ${new Date(entry.FechaCita || entry.FechaConsulta).toLocaleDateString()}</p>
-                        <p><strong>Motivo de Cita:</strong> ${entry.MotivoCita || 'N/A'}</p>
-                        <p><strong>Estado de Cita:</strong> ${entry.EstadoCita || 'N/A'}</p>
-                        <p><strong>Descripción de Cita:</strong> ${entry.DescripcionCita || 'N/A'}</p>
+                        <p><strong>Fecha de Cita:</strong> ${new Date(entry.Citas?.[0]?.FechaCita || entry.FechaConsulta).toLocaleDateString()}</p>
+                        <p><strong>Motivo de Cita:</strong> ${entry.Citas?.[0]?.MotivoCita || 'N/A'}</p>
+                        <p><strong>Estado de Cita:</strong> ${entry.Citas?.[0]?.Estado || 'N/A'}</p>
+                        <p><strong>Descripción de Cita:</strong> ${entry.Citas?.[0]?.DescripcionCita || 'N/A'}</p>
                         <p><strong>Diagnóstico:</strong> ${entry.Diagnostico}</p>
                         <p><strong>Tratamiento:</strong> ${entry.Tratamiento}</p>
                     `,
-                    data: entry, // Los datos de la fila actual
+                    data: entry,
                 },
-                {
-                    responseType: 'blob', // Indicar que queremos un archivo binario
-                }
+                { responseType: 'blob' }
             );
 
             const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -77,15 +75,17 @@ const MedicalHistoryTable = () => {
         const isInDateRange = (!startDate || entryDate >= new Date(startDate)) &&
                               (!endDate || entryDate <= new Date(endDate));
 
+        const primeraCita = entry.Citas?.[0];
+
         return (
             isInDateRange &&
             (entry.FechaConsulta?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             entry.Diagnostico?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             entry.Tratamiento?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.MotivoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.EstadoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.DescripcionCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.DNI?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            primeraCita?.MotivoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            primeraCita?.Estado?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            primeraCita?.DescripcionCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.Paciente?.DNI?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             entry.Paciente?.TipoSangre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (entry.Medico && `${entry.Medico.Nombre} ${entry.Medico.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
             (entry.Paciente && `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -140,29 +140,32 @@ const MedicalHistoryTable = () => {
                 </thead>
                 <tbody>
                     {filteredData.length > 0 ? (
-                        filteredData.map((entry, index) => (
-                            <tr key={index}>
-                                <td>{new Date(entry.FechaCita || entry.FechaConsulta).toLocaleDateString()}</td>
-                                <td>{entry.Paciente ? `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}` : 'N/A'}</td>
-                                <td>{entry.Paciente?.DNI || 'N/A'}</td>
-                                <td>{entry.Paciente?.Genero || 'N/A'}</td>
-                                <td>{entry.Paciente?.TipoSangre || 'N/A'}</td>
-                                <td>{entry.Diagnostico}</td>
-                                <td>{entry.Tratamiento}</td>
-                                <td>{entry.MotivoCita || 'N/A'}</td>
-                                <td>{entry.EstadoCita || 'N/A'}</td>
-                                <td>{entry.DescripcionCita || 'N/A'}</td>
-                                <td>{entry.Medico ? `Dr. ${entry.Medico.Nombre} ${entry.Medico.Apellido}` : 'N/A'}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleGenerateReport(entry)}
-                                        className="generate-report-button"
-                                    >
-                                        Generar Reporte
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
+                        filteredData.map((entry, index) => {
+                            const primeraCita = entry.Citas?.[0];
+                            return (
+                                <tr key={index}>
+                                    <td>{new Date(primeraCita?.FechaCita || entry.FechaConsulta).toLocaleDateString()}</td>
+                                    <td>{entry.Paciente ? `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}` : 'N/A'}</td>
+                                    <td>{entry.Paciente?.DNI || 'N/A'}</td>
+                                    <td>{entry.Paciente?.Genero || 'N/A'}</td>
+                                    <td>{entry.Paciente?.TipoSangre || 'N/A'}</td>
+                                    <td>{entry.Diagnostico || 'N/A'}</td>
+                                    <td>{entry.Tratamiento || 'N/A'}</td>
+                                    <td>{primeraCita?.MotivoCita || 'N/A'}</td>
+                                    <td>{primeraCita?.Estado || 'N/A'}</td>
+                                    <td>{primeraCita?.DescripcionCita || 'N/A'}</td>
+                                    <td>{entry.Medico ? `Dr. ${entry.Medico.Nombre} ${entry.Medico.Apellido}` : 'N/A'}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleGenerateReport(entry)}
+                                            className="generate-report-button"
+                                        >
+                                            Generar Reporte
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan="12">No se encontraron resultados</td>

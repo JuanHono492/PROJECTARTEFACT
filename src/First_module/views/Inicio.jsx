@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import Footer from '../components/Footer';
 import './Inicio.css';
 
 const Inicio = () => {
     const navigate = useNavigate();
+    const { login } = useAuth(); // Usar función de login desde el contexto
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -34,7 +36,8 @@ const Inicio = () => {
             setLoading(false);
 
             if (response.ok) {
-                navigate('/dashboard');
+                login(data); // Guardar estado de autenticación
+                navigate('/dashboard'); // Redirigir al dashboard
             } else {
                 setError(data.error || 'Usuario o contraseña incorrectos.');
             }
@@ -80,7 +83,6 @@ const Inicio = () => {
                 </div>
             </div>
             <div className="inicio-right">
-                {/* Coloca aquí el logo o una imagen decorativa */}
                 <div className="logo-container">
                     <img src="/ruta-al-logo.png" alt="Logo de la Clínica" className="logo-image" />
                 </div>
