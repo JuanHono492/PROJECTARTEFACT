@@ -1,94 +1,76 @@
-/* Contenedor General */
-.main-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    border: 1px solid #cce7f0;
+/* Tipografía y Fondo General */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
-/* Barra de navegación */
-.navbar {
-    background-color: #ffffff;
-    padding: 10px 20px;
-    border-bottom: 1px solid #cce7f0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-/* Botón de acción general */
-.button {
-    background-color: #20869c;
-    color: #ffffff;
-    padding: 8px 16px;
+/* Botón Primario */
+button {
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.button:hover {
-    background-color: #186a7a;
+button:hover {
+    transform: scale(1.05);
 }
 
-/* Tabla Consistente */
-.table-container {
-    overflow-x: auto;
-    margin-top: 20px;
-}
-
-table {
+/* Input y Select */
+input, select, textarea {
     width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #cce7f0;
-}
-
-th {
-    background-color: #20869c;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-td {
-    background-color: #f5fcff;
-}
-
-.error-text {
-    color: #d9534f;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* Contenido del calendario */
-.calendar-content {
-    padding: 20px;
-    background-color: #f5fcff;
-    border-radius: 8px;
-}
-
-/* Ajuste de sombra y espacio en botones de navegación de calendario */
-.fc-button {
-    background-color: #20869c;
-    color: #ffffff;
-    border-radius: 5px;
-}
-
-.fc-button:hover {
-    background-color: #186a7a;
-}
-
-/* Estilo de entradas de búsqueda y fecha */
-.search-input, .date-picker {
     padding: 8px;
-    border: 1px solid #cce7f0;
-    border-radius: 5px;
-    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 14px;
 }
+
+textarea {
+    resize: vertical;
+}
+
+/* Contenedores Generales */
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Mensajes de Error */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* Botones */
+.submit-button {
+    margin-top:10px;
+    background-color: #007bff;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
+    }
+}
+

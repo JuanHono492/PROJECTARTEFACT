@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import NavigationBar from '../components/navegation_bar';
 import CreateAppointment from './CreateAppointment';
-import './General.css'; // Solo se importa General.css
+import './CalendarView.css'; // Archivo CSS actualizado
 
 const CalendarView = () => {
     const [citas, setCitas] = useState([]);
@@ -19,7 +19,7 @@ const CalendarView = () => {
             const events = response.data.map((cita) => ({
                 title: `${cita.MotivoCita} - ${cita.Paciente.Nombre} ${cita.Paciente.Apellido}`,
                 start: `${cita.FechaCita}T${cita.HoraCita}`,
-                allDay: false
+                allDay: false,
             }));
             setCitas(events);
         } catch (error) {
@@ -42,14 +42,9 @@ const CalendarView = () => {
     };
 
     return (
-        <div className="content-wrapper">
-            <nav className="navbar">
-                <NavigationBar />
-            </nav>
-            <div className="module-container">
-                <button onClick={() => setShowForm(true)} className="create-button">
-                    + Crear Cita
-                </button>
+        <div className="calendar-wrapper">
+            <NavigationBar />
+            <div className="calendar-container">
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="timeGridWeek"
@@ -57,7 +52,7 @@ const CalendarView = () => {
                     headerToolbar={{
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
                     }}
                     slotMinTime="08:00:00"
                     slotMaxTime="18:00:00"
@@ -65,18 +60,23 @@ const CalendarView = () => {
                 />
             </div>
             {showForm && (
-                <CreateAppointment 
-                    selectedDate={selectedDate} 
-                    onClose={closeForm} 
+                <CreateAppointment
+                    selectedDate={selectedDate}
+                    onClose={closeForm}
                     onSave={() => {
-                        setShowForm(false);
-                        setSelectedDate(null);
+                        closeForm();
                         fetchCitas();
-                    }} 
+                    }}
                 />
             )}
+            <button
+                className="floating-create-button"
+                onClick={() => setShowForm(true)}
+            >
+                + Crear Cita
+            </button>
         </div>
     );
 };
 
-export default CalendarView;
+export default CalendarView

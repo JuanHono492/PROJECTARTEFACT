@@ -8,15 +8,16 @@ import GeneracionReportes from "./Principal_module/views/Generacion_reportes";
 import GestionUsuarios from "./Principal_module/views/Gestion_usuarios";
 import Perfil from "./User_module/views/Perfil";
 import CrearUsuario from "./User_module/views/CrearUsuario";
+import CreatePatient from "./Principal_module/views/CreatePatient"; // Importa el nuevo componente
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Login */}
+        {/* Página de Inicio */}
         <Route path="/" element={<Inicio />} />
-        
+
         {/* Rutas protegidas */}
         <Route
           path="/dashboard"
@@ -66,8 +67,18 @@ function App() {
             </PrivateRoute>
           }
         />
-        
-        {/* Módulo de Usuario */}
+
+        {/* Nueva ruta: Crear Paciente */}
+        <Route
+          path="/crear-paciente"
+          element={
+            <PrivateRoute>
+              <CreatePatient />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Módulo del Usuario */}
         <Route
           path="/perfil"
           element={

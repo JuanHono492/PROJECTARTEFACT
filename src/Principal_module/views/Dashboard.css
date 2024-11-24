@@ -1,9 +1,8 @@
-/* Contenedor general */
 .dashboard-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f4f7fb; /* Fondo claro */
+    background-color: #f4f7fb;
     padding: 20px;
 }
 
@@ -13,7 +12,6 @@
     padding: 10px;
 }
 
-/* Contenido principal */
 .main-content {
     flex-grow: 1;
     padding: 20px;
@@ -21,57 +19,5 @@
     margin: 0 auto;
     background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombras más visibles */
-}
-
-/* Título del panel de control */
-.dashboard-title {
-    margin-bottom: 30px;
-    color: #2c3e50;
-    text-align: center;
-    font-size: 32px;
-    font-weight: 600;
-}
-
-/* Contenedor de las tarjetas */
-.dashboard-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin: 0 auto;
-}
-
-/* Estilos para las tarjetas */
-.card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.card h2 {
-    font-size: 18px;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-/* Ajuste de los gráficos */
-.card canvas {
-    max-width: 100%;
-    height: 350px; /* Gráficos más altos */
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .dashboard-cards {
-        grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
-    }
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }

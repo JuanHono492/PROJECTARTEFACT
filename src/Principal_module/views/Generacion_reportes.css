@@ -1,0 +1,32 @@
+.main-content {
+    font-family: 'Arial, sans-serif';
+    line-height: 1.6;
+    color: #333;
+}
+
+button {
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+@media print {
+    .navbar, .main-content > h1 {
+        display: none;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+    }
+
+    div[id^="reporte-"] {
+        page-break-after: always;
+        margin: 0;
+        width: 100%;
+    }
+}

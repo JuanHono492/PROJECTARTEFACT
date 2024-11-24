@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './MedicalHistoryTable.css';
+import { Modal, Box, Button, Typography } from '@mui/material';
 
 const MedicalHistoryTable = () => {
     const [historialData, setHistorialData] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedReport, setSelectedReport] = useState(null);
 
-    // Obtener los datos del historial médico desde la API
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
     useEffect(() => {
         const fetchHistorialData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/historias');
+                const response = await fetch(`${apiBaseUrl}/historias`);
                 if (response.ok) {
                     const data = await response.json();
                     setHistorialData(data);
@@ -27,100 +27,40 @@ const MedicalHistoryTable = () => {
         };
 
         fetchHistorialData();
-    }, []);
+    }, [apiBaseUrl]);
 
-    const handleSearchChange = (event) => setSearchTerm(event.target.value);
-
-    const handleStartDateChange = (event) => setStartDate(event.target.value);
-
-    const handleEndDateChange = (event) => setEndDate(event.target.value);
-
-    const handleGenerateReport = async (entry) => {
+    const handleGenerateReport = (entry) => {
         try {
-            const response = await axios.post(
-                'http://localhost:5000/reportes/generate',
-                {
-                    template: `
-                        <h1>Reporte de Historial Médico</h1>
-                        <p><strong>Paciente:</strong> ${entry.Paciente?.Nombre} ${entry.Paciente?.Apellido}</p>
-                        <p><strong>DNI:</strong> ${entry.Paciente?.DNI}</p>
-                        <p><strong>Género:</strong> ${entry.Paciente?.Genero}</p>
-                        <p><strong>Tipo de Sangre:</strong> ${entry.Paciente?.TipoSangre}</p>
-                        <p><strong>Doctor:</strong> ${entry.Medico?.Nombre} ${entry.Medico?.Apellido}</p>
-                        <p><strong>Fecha de Cita:</strong> ${new Date(entry.Citas?.[0]?.FechaCita || entry.FechaConsulta).toLocaleDateString()}</p>
-                        <p><strong>Motivo de Cita:</strong> ${entry.Citas?.[0]?.MotivoCita || 'N/A'}</p>
-                        <p><strong>Estado de Cita:</strong> ${entry.Citas?.[0]?.Estado || 'N/A'}</p>
-                        <p><strong>Descripción de Cita:</strong> ${entry.Citas?.[0]?.DescripcionCita || 'N/A'}</p>
-                        <p><strong>Diagnóstico:</strong> ${entry.Diagnostico}</p>
-                        <p><strong>Tratamiento:</strong> ${entry.Tratamiento}</p>
-                    `,
-                    data: entry,
-                },
-                { responseType: 'blob' }
-            );
+            const reportData = {
+                Paciente: `${entry.Paciente?.Nombre} ${entry.Paciente?.Apellido}`,
+                DNI: entry.Paciente?.DNI,
+                Genero: entry.Paciente?.Genero,
+                TipoSangre: entry.Paciente?.TipoSangre,
+                Medico: `${entry.Medico?.Nombre} ${entry.Medico?.Apellido}`,
+                FechaCita: new Date(entry.Citas?.[0]?.FechaCita || entry.FechaConsulta).toLocaleDateString(),
+                MotivoCita: entry.Citas?.[0]?.MotivoCita || 'N/A',
+                EstadoCita: entry.Citas?.[0]?.Estado || 'N/A',
+                DescripcionCita: entry.Citas?.[0]?.DescripcionCita || 'N/A',
+                Diagnostico: entry.Diagnostico,
+                Tratamiento: entry.Tratamiento,
+            };
 
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `Reporte_${entry.Paciente?.Nombre}_${entry.Paciente?.Apellido}.pdf`;
-            link.click();
+            setSelectedReport(reportData);
+            setOpenModal(true); // Abre el modal
         } catch (error) {
-            console.error('Error al generar el reporte:', error);
-            alert('Error al generar el reporte');
+            console.error('Error al preparar el reporte:', error);
+            alert('Error al preparar el reporte');
         }
     };
 
-    const filteredData = historialData.filter((entry) => {
-        const entryDate = new Date(entry.FechaConsulta);
-        const isInDateRange = (!startDate || entryDate >= new Date(startDate)) &&
-                              (!endDate || entryDate <= new Date(endDate));
-
-        const primeraCita = entry.Citas?.[0];
-
-        return (
-            isInDateRange &&
-            (entry.FechaConsulta?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.Diagnostico?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.Tratamiento?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            primeraCita?.MotivoCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            primeraCita?.Estado?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            primeraCita?.DescripcionCita?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.Paciente?.DNI?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            entry.Paciente?.TipoSangre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (entry.Medico && `${entry.Medico.Nombre} ${entry.Medico.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (entry.Paciente && `${entry.Paciente.Nombre} ${entry.Paciente.Apellido}`.toLowerCase().includes(searchTerm.toLowerCase()))
-            )
-        );
-    });
+    const closeModal = () => {
+        setOpenModal(false);
+        setSelectedReport(null);
+    };
 
     return (
         <div className="table-container" style={{ width: '100%', maxWidth: '1400px' }}>
-            <div className="search-container">
-                <input
-                    type="text"
-                    placeholder="Buscar en el historial médico..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    className="search-input"
-                />
-                <div className="date-filter">
-                    <input
-                        type="date"
-                        value={startDate}
-                        onChange={handleStartDateChange}
-                        className="date-input"
-                        placeholder="Fecha de inicio"
-                    />
-                    <input
-                        type="date"
-                        value={endDate}
-                        onChange={handleEndDateChange}
-                        className="date-input"
-                        placeholder="Fecha de fin"
-                    />
-                </div>
-            </div>
-
+            {/* Tabla principal */}
             <table className="medical-history-table">
                 <thead>
                     <tr>
@@ -139,8 +79,8 @@ const MedicalHistoryTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredData.length > 0 ? (
-                        filteredData.map((entry, index) => {
+                    {historialData.length > 0 ? (
+                        historialData.map((entry, index) => {
                             const primeraCita = entry.Citas?.[0];
                             return (
                                 <tr key={index}>
@@ -173,7 +113,80 @@ const MedicalHistoryTable = () => {
                     )}
                 </tbody>
             </table>
-            {error && <p className="error-text">{error}</p>}
+
+            {/* Modal */}
+            <Modal
+                open={openModal}
+                onClose={closeModal}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                        maxWidth: '600px',
+                        width: '90%',
+                    }}
+                >
+                    {selectedReport ? (
+                        <>
+                            <Typography id="modal-title" variant="h6" component="h2" textAlign="center">
+                                Reporte Médico
+                            </Typography>
+                            <Typography variant="body1" sx={{ mt: 2 }}>
+                                <strong>Paciente:</strong> {selectedReport.Paciente}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>DNI:</strong> {selectedReport.DNI}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Genero:</strong> {selectedReport.Genero}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Tipo de Sangre:</strong> {selectedReport.TipoSangre}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Médico:</strong> {selectedReport.Medico}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Fecha de Cita:</strong> {selectedReport.FechaCita}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Motivo de Cita:</strong> {selectedReport.MotivoCita}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Estado de Cita:</strong> {selectedReport.EstadoCita}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Descripción de Cita:</strong> {selectedReport.DescripcionCita}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Diagnóstico:</strong> {selectedReport.Diagnostico}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Tratamiento:</strong> {selectedReport.Tratamiento}
+                            </Typography>
+                            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+                                <Button variant="contained" color="primary" onClick={() => alert('Guardado')}>
+                                    Guardar
+                                </Button>
+                                <Button variant="outlined" color="secondary" onClick={closeModal}>
+                                    Desechar
+                                </Button>
+                            </Box>
+                        </>
+                    ) : (
+                        <Typography>No se encontraron datos para el reporte.</Typography>
+                    )}
+                </Box>
+            </Modal>
         </div>
     );
 };

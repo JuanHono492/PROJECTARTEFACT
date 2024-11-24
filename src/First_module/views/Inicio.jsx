@@ -11,20 +11,24 @@ const Inicio = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // URL de autenticación desde .env
+    const authApiUrl = process.env.REACT_APP_API_BASE_URL;
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setCredentials({
-            ...credentials,
+        setCredentials((prev) => ({
+            ...prev,
             [name]: value,
-        });
+        }));
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError(''); // Limpiar errores previos
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/auth/login', {
+            const response = await fetch(`${authApiUrl}/auth`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,7 +37,6 @@ const Inicio = () => {
             });
 
             const data = await response.json();
-            setLoading(false);
 
             if (response.ok) {
                 login(data); // Guardar estado de autenticación
@@ -41,9 +44,10 @@ const Inicio = () => {
             } else {
                 setError(data.error || 'Usuario o contraseña incorrectos.');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            setError('Error de red o del servidor.');
+        } catch (err) {
+            console.error('Error de red o del servidor:', err);
+            setError('Error de red o del servidor. Por favor, inténtelo más tarde.');
+        } finally {
             setLoading(false);
         }
     };

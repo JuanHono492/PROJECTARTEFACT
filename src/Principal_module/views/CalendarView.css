@@ -1,102 +1,41 @@
-/* General Styles */
-body, html {
-    font-family: Arial, sans-serif;
-    background-color: #f0f7fc;
-    margin: 0;
-    padding: 0;
-}
-
-/* Wrapper for consistent padding and margin between navigation and content */
-.content-wrapper {
+.calendar-wrapper {
     padding: 20px;
+    min-height: 100vh;
+    position: relative;
 }
 
-.navbar {
-    background-color: #0d6efd;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.navbar .nav-link {
-    color: #ffffff;
-    margin-right: 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.navbar .nav-link.active {
-    border-bottom: 2px solid #ffffff;
-}
-
-/* Module container for consistent module spacing */
-.module-container {
+/* Contenedor del calendario */
+.calendar-container {
     background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px; /* Separation from navigation bar */
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
-/* Button Style */
-.create-button {
+.floating-create-button {
+    position: fixed; /* Fijo respecto al viewport */
+    bottom: 20px; /* Separado del borde inferior */
+    right: 20px; /* Separado del borde derecho */
     background-color: #007bff;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 15px; /* Ajuste de padding */
+    border-radius: 50%; /* Botón completamente redondo */
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    font-weight: bold;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Encima de otros elementos */
+    width: 60px; /* Ancho fijo */
+    height: 60px; /* Alto fijo */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrar el contenido */
 }
 
-.create-button:hover {
+.floating-create-button:hover {
     background-color: #0056b3;
+    transform: scale(1.1);
 }
 
-/* FullCalendar Overrides */
-.fc .fc-toolbar-title {
-    color: #007bff;
-    font-weight: bold;
-}
-
-.fc .fc-button {
-    background-color: #007bff !important;
-    color: white !important;
-    border: none;
-    border-radius: 4px;
-}
-
-.fc .fc-button:hover {
-    background-color: #0056b3 !important;
-}
-
-.fc .fc-daygrid-day, .fc .fc-timegrid-col {
-    background-color: #f9f9f9;
-}
-
-.fc .fc-day-today {
-    background-color: #eaf7ff !important;
-}
-
-.fc .fc-daygrid-day-number {
-    color: #007bff;
-}
-
-.fc .fc-col-header-cell-cushion {
-    color: #0056b3;
-    font-weight: bold;
-}
-
-/* Calendar container adjustments */
-.calendar-content {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    background-color: #ffffff;
-}
