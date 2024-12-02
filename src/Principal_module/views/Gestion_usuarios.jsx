@@ -42,13 +42,30 @@ const GestionUsuarios = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Verificar que las contraseñas coinciden
         if (!passwordMatch) {
             alert('Las contraseñas no coinciden');
             return;
         }
 
+        // Crear un objeto con los datos del formulario
+        const userData = {
+            nombre: formData.nombre,
+            apellido: formData.apellido,
+            dni: formData.dni,
+            nombreUsuario: formData.nombreUsuario,
+            rol: formData.rol,
+            correoElectronico: formData.correoElectronico,
+            telefono: formData.telefono,
+            estado: formData.estado, // Mantener como booleano
+            contrasena: formData.contrasena
+        };
+
+        console.log('Datos enviados:', userData); // Verifica los datos antes de enviar
+
         try {
-            const response = await axios.post('http://localhost:5000/usuarios', formData);
+            // Enviar la solicitud POST con los datos del formulario
+            const response = await axios.post('http://localhost:5000/api/usuarios', userData);
             console.log("Usuario creado:", response.data);
             alert("Usuario creado exitosamente");
         } catch (error) {

@@ -4,99 +4,86 @@ import './CreateAppointment.css';
 
 const CreateAppointment = ({ selectedDate, onClose, onSave }) => {
     const [formData, setFormData] = useState({
-        PacienteID: '',
-        NumeroHistoria: '',
-        NombrePaciente: '',
-        ApellidoPaciente: '',
-        DNI: '',
-        DoctorID: '',
-        MotivoCita: '',
-        DescripcionCita: '',
-        FechaCita: selectedDate || '',
-        HoraCita: '',
-        Estado: 'Pendiente',
+        PacienteID: '',        // ID del paciente
+        DoctorID: '',          // ID del doctor (solo el DoctorID se enviará)
+        FechaCita: selectedDate || '', // Fecha de la cita
+        HoraCita: '',          // Hora de la cita
+        MotivoCita: '',        // Motivo de la cita
+        Estado: 'Pendiente',   // Estado de la cita (Pendiente, Completada, Cancelada)
+        DescripcionCita: '',   // Descripción de la cita
     });
+
     const [doctores, setDoctores] = useState([]);
+    const [pacientes, setPacientes] = useState([]);
     const [error, setError] = useState('');
 
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
-    // Cargar la lista de doctores al cargar el componente
+    // Cargar la lista de doctores
     useEffect(() => {
         const fetchDoctores = async () => {
             try {
-                const response = await fetch(`${apiBaseUrl}/doctores`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setDoctores(data);
-                } else {
-                    setError('Error al obtener el historial médico');
-                }
+                const response = await axios.get(`${apiBaseUrl}/doctores`);
+                setDoctores(response.data);
             } catch (err) {
-                console.error('Error al obtener datos:', err);
-                setError('Error al obtener el historial médico');
+                console.error('Error al obtener los doctores:', err);
+                setError('Error al obtener los doctores');
             }
         };
-    
+
         fetchDoctores();
     }, [apiBaseUrl]);
-    
-    
 
-    // Manejar los cambios en los campos
+    // Cargar la lista de pacientes
+    useEffect(() => {
+        const fetchPacientes = async () => {
+            try {
+                const response = await axios.get(`${apiBaseUrl}/pacientes`);
+                setPacientes(response.data);
+            } catch (err) {
+                console.error('Error al obtener los pacientes:', err);
+                setError('Error al obtener los pacientes');
+            }
+        };
+
+        fetchPacientes();
+    }, [apiBaseUrl]);
+
+    // Manejar los cambios en los campos del formulario
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Buscar datos por DNI
-    const handleBuscarPorDNI = async () => {
-        const dni = formData.DNI.trim();
-        if (!dni) {
-            alert('Ingrese un DNI válido.');
-            return;
-        }
-
-        try {
-            const x= "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imhvbm9qdWFuOUBnbWFpbC5jb20ifQ.HHyPK1eIvEB9rIjgM6X3OEz9eLpAHALAytvN0aTpMaM"
-            const response = await axios.get(
-                `https://dniruc.apisperu.com/api/v1/dni/${dni}?token=${x}`
-            );
-
-            if (response.data) {
-                const { nombres, apellidoPaterno, apellidoMaterno } = response.data;
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    NombrePaciente: nombres,
-                    ApellidoPaciente: `${apellidoPaterno} ${apellidoMaterno}`,
-                }));
-            } else {
-                alert('No se encontraron datos para este DNI.');
-            }
-        } catch (error) {
-            console.error('Error al buscar los datos del DNI:', error);
-            alert('Hubo un error al buscar los datos del DNI.');
-        }
+    // Manejar la selección del doctor (solo se guarda el DoctorID, no el nombre)
+    const handleDoctorChange = (e) => {
+        const selectedDoctorID = e.target.value;  // Tomar solo el DoctorID
+        console.log("DoctorID seleccionado:", selectedDoctorID);  // Verificar el DoctorID seleccionado
+        setFormData({ ...formData, DoctorID: selectedDoctorID });  // Asignar solo el DoctorID
     };
+
     // Manejar la creación de la cita
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Verificar los datos que se enviarán
+        console.log("Datos a enviar (formData):", formData);
+
+        // Solo enviamos los campos relevantes para la creación de una cita
+        const citaData = {
+            PacienteID: formData.PacienteID,
+            DoctorID: formData.DoctorID,  // Solo el DoctorID (no el nombre)
+            FechaCita: formData.FechaCita,
+            HoraCita: formData.HoraCita,
+            MotivoCita: formData.MotivoCita,
+            Estado: formData.Estado,
+            DescripcionCita: formData.DescripcionCita,
+        };
+
+        console.log("Cita Data a enviar:", citaData);
+
         try {
-            const response = await fetch(`${apiBaseUrl}/citas`, {
-                method: 'POST', // Método HTTP
-                headers: {
-                    'Content-Type': 'application/json', // Indica que los datos son JSON
-                },
-                body: JSON.stringify(formData), // Convierte los datos en JSON
-            });
-
-            // Verificar si la respuesta fue exitosa
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.statusText}`);
-            }
-
-            const result = await response.json();
-            console.log('Cita creada con éxito:', result);
-
+            const response = await axios.post(`${apiBaseUrl}/citas`, citaData);
+            console.log('Cita creada con éxito:', response.data);
             alert('Cita creada con éxito');
             onSave(); // Callback para actualizar la vista
         } catch (error) {
@@ -105,54 +92,30 @@ const CreateAppointment = ({ selectedDate, onClose, onSave }) => {
         }
     };
 
-
     return (
         <div className="appointment-form-container">
             <form onSubmit={handleSubmit} className="appointment-form">
                 <h2>Crear Cita</h2>
+
                 <div className="form-group">
-                    <label>Nombre del Paciente:</label>
-                    <input
-                        type="text"
-                        name="NombrePaciente"
-                        value={formData.NombrePaciente}
-                        onChange={handleChange}
-                    />
+                    <label>Paciente:</label>
+                    <select name="PacienteID" value={formData.PacienteID} onChange={handleChange}>
+                        <option value="">Seleccione un paciente</option>
+                        {pacientes.map((paciente) => (
+                            <option key={paciente.PacienteID} value={paciente.PacienteID}>
+                                {paciente.Nombre} {paciente.Apellido}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="form-group">
-                    <label>Apellido del Paciente:</label>
-                    <input
-                        type="text"
-                        name="ApellidoPaciente"
-                        value={formData.ApellidoPaciente}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>DNI:</label>
-                    <div style={{ display: 'flex' }}>
-                        <input
-                            type="text"
-                            name="DNI"
-                            value={formData.DNI}
-                            onChange={handleChange}
-                            style={{ marginRight: '8px' }}
-                        />
-                        <button type="button" onClick={handleBuscarPorDNI}>
-                            Buscar
-                        </button>
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label>Nombre del Doctor:</label>
-                    <select name="DoctorID" value={formData.DoctorID} onChange={handleChange}>
+                    <label>Doctor:</label>
+                    <select name="DoctorID" value={formData.DoctorID} onChange={handleDoctorChange}>
                         <option value="">Seleccione un doctor</option>
                         {doctores.map((doctor) => (
-                            <option key={doctor.UsuarioID} value={doctor.UsuarioID}>
-                                {doctor.Nombre} {doctor.Apellido}
+                            <option key={doctor.DoctorID} value={doctor.DoctorID}>
+                                {doctor.Nombre} {doctor.Apellido} {/* Mostramos el nombre del doctor */}
                             </option>
                         ))}
                     </select>
@@ -160,22 +123,41 @@ const CreateAppointment = ({ selectedDate, onClose, onSave }) => {
 
                 <div className="form-group">
                     <label>Motivo de Cita:</label>
-                    <input type="text" name="MotivoCita" value={formData.MotivoCita} onChange={handleChange} />
+                    <input
+                        type="text"
+                        name="MotivoCita"
+                        value={formData.MotivoCita}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="form-group">
                     <label>Descripción de la Cita:</label>
-                    <textarea name="DescripcionCita" value={formData.DescripcionCita} onChange={handleChange}></textarea>
+                    <textarea
+                        name="DescripcionCita"
+                        value={formData.DescripcionCita}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="form-group">
                     <label>Fecha de Cita:</label>
-                    <input type="date" name="FechaCita" value={formData.FechaCita} onChange={handleChange} />
+                    <input
+                        type="date"
+                        name="FechaCita"
+                        value={formData.FechaCita}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="form-group">
                     <label>Hora de Cita:</label>
-                    <input type="time" name="HoraCita" value={formData.HoraCita} onChange={handleChange} />
+                    <input
+                        type="time"
+                        name="HoraCita"
+                        value={formData.HoraCita}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="form-group">

@@ -8,6 +8,9 @@ import NavigationBar from '../components/navegation_bar';
 import CreateAppointment from './CreateAppointment';
 import './CalendarView.css'; // Archivo CSS actualizado
 
+
+axios.defaults.baseURL = 'http://localhost:5000';
+
 const CalendarView = () => {
     const [citas, setCitas] = useState([]);
     const [showForm, setShowForm] = useState(false);
